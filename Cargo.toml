@@ -21,6 +21,7 @@ repository = 'https://github.com/kilork/openid'
 
 [features]
 uma2 = []
+uma2_keycloak = ["uma2"]
 default = []
 
 [dependencies]

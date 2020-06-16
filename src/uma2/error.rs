@@ -7,7 +7,8 @@ pub enum Uma2Error {
     NoPermissionsEndpoint,
     NoPolicyAssociationEndpoint,
     ResourceSetEndpointMalformed,
-    PolicyAssociationEndpointMalformed
+    PolicyAssociationEndpointMalformed,
+    PermissionEndpointMalformed
 }
 
 impl std::error::Error for Uma2Error {
@@ -26,7 +27,8 @@ impl std::fmt::Display for Uma2Error {
                    Uma2Error::NoPermissionsEndpoint => "No permissions endpoint discovered",
                    Uma2Error::NoPolicyAssociationEndpoint => "No permissions policy association endpoint discovered",
                    Uma2Error::ResourceSetEndpointMalformed => "resource_set endpoint is malformed",
-                   Uma2Error::PolicyAssociationEndpointMalformed => "policy_endpoint is malformed"
+                   Uma2Error::PolicyAssociationEndpointMalformed => "policy_endpoint is malformed",
+                   Uma2Error::PermissionEndpointMalformed => "Permission endpoint is malformed"
                }
         )
     }

@@ -7,6 +7,9 @@ mod permission_ticket;
 mod resource;
 mod requesting_party_token;
 
+#[cfg(feature = "uma2_keycloak")]
+pub mod keycloak;
+
 pub use claim_token_format::Uma2ClaimTokenFormat;
 pub use permission_association::{
     Uma2PermissionAssociation,
