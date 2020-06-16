@@ -27,5 +27,4 @@ pub use resource::Uma2Owner;
 pub use rpt::Uma2AuthenticationMethod;
 pub use discovered::{DiscoveredUma2, discover_uma2};
 pub use config::Uma2Config;
-
 pub use requesting_party_token::{RequestingPartyToken, RequestingPartyTokenAuthorization, RequestingPartyTokenAuthorizationPermission};
