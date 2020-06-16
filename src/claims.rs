@@ -32,6 +32,8 @@ pub trait Claims {
 
     fn userinfo(&self) -> &Userinfo;
 
+    // The "jti" (JWT ID) claim provides a unique identifier for the JWT. https://tools.ietf.org/html/rfc7519#section-4.1.7
+    fn jti(&self) -> Option<&String>;
     /// Decodes at_hash. Returns None if it doesn't exist or something goes wrong.
     ///
     /// See [spec 3.1.3.6](https://openid.net/specs/openid-connect-core-1_0.html#CodeIDToken)

@@ -40,6 +40,9 @@ pub struct StandardClaims {
     pub azp: Option<String>,
     #[serde(flatten)]
     pub userinfo: Userinfo,
+    // https://tools.ietf.org/html/rfc7519#section-4.1.7
+    #[serde(default)]
+    pub jti: Option<String>
 }
 
 impl Claims for StandardClaims {
@@ -81,6 +84,9 @@ impl Claims for StandardClaims {
     }
     fn azp(&self) -> Option<&String> {
         self.azp.as_ref()
+    }
+    fn jti(&self) -> Option<&String> {
+        self.jti.as_ref()
     }
 }
 

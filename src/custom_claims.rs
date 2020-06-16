@@ -82,4 +82,7 @@ where
     fn userinfo(&self) -> &crate::Userinfo {
         self.standard_claims().userinfo()
     }
+    fn jti(&self) -> Option<&String> {
+        self.standard_claims().jti()
+    }
 }
