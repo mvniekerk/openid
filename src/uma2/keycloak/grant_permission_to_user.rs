@@ -1,10 +1,12 @@
-use serde::{Deserialize, Serialize};
-use crate::{Client, Provider, Claims, OAuth2Error};
-use crate::uma2::Uma2Provider;
-use biscuit::CompactJson;
 use crate::error::ClientError;
-use crate::uma2::error::Uma2Error::{NoUma2Discovered, NoPermissionsEndpoint, PermissionEndpointMalformed};
-use reqwest::header::{CONTENT_TYPE, AUTHORIZATION, ACCEPT};
+use crate::uma2::error::Uma2Error::{
+    NoPermissionsEndpoint, NoUma2Discovered, PermissionEndpointMalformed,
+};
+use crate::uma2::Uma2Provider;
+use crate::{Claims, Client, OAuth2Error, Provider};
+use biscuit::CompactJson;
+use reqwest::header::{ACCEPT, AUTHORIZATION, CONTENT_TYPE};
+use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Eq)]
@@ -13,20 +15,20 @@ pub struct Uma2GrantPermissionToUserRequest {
     pub requester: String,
     pub granted: bool,
     #[serde(rename = "scopeName")]
-    pub scope_name: Option<String>
+    pub scope_name: Option<String>,
 }
 
 impl<P, C> Client<P, C>
-    where
-        P: Provider + Uma2Provider,
-        C: CompactJson + Claims,
+where
+    P: Provider + Uma2Provider,
+    C: CompactJson + Claims,
 {
     pub async fn grant_permission_to_user(
         &self,
         token: String,
         resource_id: String,
         requester: String,
-        scope_name: Option<String>
+        scope_name: Option<String>,
     ) -> Result<String, ClientError> {
         if !self.provider.uma2_discovered() {
             return Err(ClientError::Uma2(NoUma2Discovered));
@@ -45,9 +47,8 @@ impl<P, C> Client<P, C>
             resource: resource_id,
             requester,
             scope_name,
-            granted: true
+            granted: true,
         };
-
 
         let json = self
             .http_client

@@ -42,7 +42,7 @@ pub struct StandardClaims {
     pub userinfo: Userinfo,
     // https://tools.ietf.org/html/rfc7519#section-4.1.7
     #[serde(default)]
-    pub jti: Option<String>
+    pub jti: Option<String>,
 }
 
 impl Claims for StandardClaims {
