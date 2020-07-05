@@ -56,6 +56,7 @@ where
     /// * `owner` Resource server is the default user, unless this value is set. Can be the username
     /// of the user or its server identifier
     /// * `owner_managed_access` Whether to allow user managed access of this resource
+    /// * `attributes` Hashmap of string vectors for extra attributes
     pub async fn create_uma2_resource(
         &self,
         pat_token: String,
@@ -128,6 +129,7 @@ where
     /// # Arguments
     /// * `pat_token` A Protection API token (PAT) is like any OAuth2 token, but should have the
     /// uma_protection scope defined
+    /// * `id` ID of the resource
     /// * `name` User readable name for this resource.
     /// * `resource_type` The type of resource. Helps to categorise resources
     /// * `icon_uri` User visible icon's URL
@@ -136,9 +138,11 @@ where
     /// * `owner` Resource server is the default user, unless this value is set. Can be the username
     /// of the user or its server identifier
     /// * `owner_managed_access` Whether to allow user managed access of this resource
+    /// * `attributes` Hashmap of string vectors for extra attributes
     pub async fn update_uma2_resource(
         &self,
         pat_token: String,
+        id: String,
         name: String,
         resource_type: Option<String>,
         icon_uri: Option<String>,
@@ -166,7 +170,11 @@ where
                 .collect()
         });
 
-        let url = self.provider.resource_registration_uri().unwrap().clone();
+        let mut url = self.provider.resource_registration_uri().unwrap().clone();
+
+        url.path_segments_mut()
+            .map_err(|_| ClientError::Uma2(ResourceSetEndpointMalformed))?
+            .extend(&[id]);
 
         let body = Uma2Resource {
             id: None,
