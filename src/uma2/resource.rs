@@ -6,6 +6,7 @@ use biscuit::CompactJson;
 use reqwest::header::{ACCEPT, AUTHORIZATION, CONTENT_TYPE};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+use std::collections::HashMap;
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Eq)]
 pub struct Uma2Resource {
@@ -21,6 +22,7 @@ pub struct Uma2Resource {
     pub owner: Option<Uma2Owner>,
     #[serde(rename = "ownerManagedAccess")]
     pub owner_managed_access: Option<bool>,
+    pub attributes: Option<HashMap<String, Vec<String>>>
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Eq)]
