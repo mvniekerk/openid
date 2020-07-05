@@ -174,7 +174,7 @@ where
 
         url.path_segments_mut()
             .map_err(|_| ClientError::Uma2(ResourceSetEndpointMalformed))?
-            .extend(&[id]);
+            .extend(&[id.clone()]);
 
         let body = Uma2Resource {
             id: None,
@@ -188,7 +188,7 @@ where
             attributes
         };
 
-        let json = self
+        let result = self
             .http_client
             .put(url)
             .header(CONTENT_TYPE, "application/json")
@@ -196,7 +196,13 @@ where
             .header(ACCEPT, "application/json")
             .json(&body)
             .send()
-            .await?
+            .await?;
+
+        if result.status() == 204u16 {
+            return self.get_uma2_resource_by_id(pat_token, id).await;
+        }
+
+        let json = result
             .json::<Value>()
             .await?;
 
