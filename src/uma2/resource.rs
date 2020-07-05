@@ -66,6 +66,7 @@ where
         display_name: Option<String>,
         owner: Option<Uma2Owner>,
         owner_managed_access: Option<bool>,
+        attributes: Option<HashMap<String, Vec<String>>>
     ) -> Result<Uma2Resource, ClientError> {
         if !self.provider.uma2_discovered() {
             return Err(ClientError::Uma2(NoUma2Discovered));
@@ -96,6 +97,7 @@ where
             display_name,
             owner,
             owner_managed_access,
+            attributes
         };
 
         let json = self
@@ -144,6 +146,7 @@ where
         display_name: Option<String>,
         owner: Option<Uma2Owner>,
         owner_managed_access: Option<bool>,
+        attributes: Option<HashMap<String, Vec<String>>>
     ) -> Result<Uma2Resource, ClientError> {
         if !self.provider.uma2_discovered() {
             return Err(ClientError::Uma2(NoUma2Discovered));
@@ -174,6 +177,7 @@ where
             display_name,
             owner,
             owner_managed_access,
+            attributes
         };
 
         let json = self
