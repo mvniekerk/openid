@@ -59,7 +59,17 @@ impl<C: CompactJson + Claims> Client<Discovered, C> {
         redirect: Option<String>,
         issuer: Url,
     ) -> Result<Self, Error> {
-        let http_client = reqwest::Client::new();
+        Self::discover_with_client(reqwest::Client::new(), id, secret, redirect, issuer).await
+    }
+
+    /// Constructs a client from an issuer url and client parameters via discovery
+    pub async fn discover_with_client(
+        http_client: reqwest::Client,
+        id: String,
+        secret: String,
+        redirect: Option<String>,
+        issuer: Url,
+    ) -> Result<Self, Error> {
         let config = discovered::discover(&http_client, issuer).await?;
         let jwks = discovered::jwks(&http_client, config.jwks_uri.clone()).await?;
 
@@ -288,11 +298,11 @@ impl<C: CompactJson + Claims, P: Provider + Configurable> Client<P, C> {
         let alg = header.registered.algorithm;
         match key.algorithm {
             // HMAC
-            AlgorithmParameters::OctetKey (ref value) => match alg {
+            AlgorithmParameters::OctetKey(ref parameters) => match alg {
                 SignatureAlgorithm::HS256
                 | SignatureAlgorithm::HS384
                 | SignatureAlgorithm::HS512 => {
-                    *token = token.decode(&Secret::Bytes(value.value.clone()), alg)?;
+                    *token = token.decode(&Secret::Bytes(parameters.value.clone()), alg)?;
                     Ok(())
                 }
                 _ => wrong_key!("HS256 | HS384 | HS512", alg),
@@ -311,7 +321,9 @@ impl<C: CompactJson + Claims, P: Provider + Configurable> Client<P, C> {
                 _ => wrong_key!("RS256 | RS384 | RS512", alg),
             },
             AlgorithmParameters::EllipticCurve(_) => unimplemented!("No support for EC keys yet"),
-            AlgorithmParameters::OctetKeyPair(_) => unimplemented!("No support for something other than OctetKeyParameters")
+            AlgorithmParameters::OctetKeyPair(_) => {
+                unimplemented!("No support for Octet key pair yet")
+            }
         }
     }
 
